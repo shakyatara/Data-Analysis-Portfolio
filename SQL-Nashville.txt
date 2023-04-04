@@ -1,0 +1,33 @@
+
+
+select *
+FROM [PortfolioProject].[dbo].[Nashville Housing Data for Data Cleaning]
+
+--Updating the table where PropertyAddress is null
+select a.ParcelID, a.PropertyAddress, b.ParcelID, b.PropertyAddress, ISNULL(a.PropertyAddress, b.PropertyAddress)
+FROM [PortfolioProject].[dbo].[Nashville Housing Data for Data Cleaning] a
+join [PortfolioProject].[dbo].[Nashville Housing Data for Data Cleaning] b
+on a.ParcelID = b.ParcelID
+and a.[UniqueID] <> b.[UniqueID]
+where a.PropertyAddress is null
+
+Update a
+Set PropertyAddress = ISNULL(a.PropertyAddress, b.PropertyAddress)
+FROM [PortfolioProject].[dbo].[Nashville Housing Data for Data Cleaning] a
+join [PortfolioProject].[dbo].[Nashville Housing Data for Data Cleaning] b
+on a.ParcelID = b.ParcelID
+and a.[UniqueID] <> b.[UniqueID]
+where a.PropertyAddress is null
+
+-- Separating the Address as Address and Town
+select 
+substring(PropertyAddress, 1, charindex(',', PropertyAddress)-1) as Address,
+substring(PropertyAddress, charindex(',', PropertyAddress) +1,lEN(PropertyAddress)) as Town
+--substring(PropertyAddress, 1, charindex(' ', PropertyAddress)) as StreetNumber
+
+FROM [PortfolioProject].[dbo].[Nashville Housing Data for Data Cleaning] as a
+
+Alter table [Nashville Housing Data for Data Cleaning]
+
+Update [Nashville Housing Data for Data Cleaning]
+set PropertySplitAddress nvarchar(255);
